@@ -1,0 +1,99 @@
+.hover-menu-trigger {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50px;
+  height: 100vh;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.hover-menu-nav {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  z-index: 99;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.hover-menu-content {
+  width: 100%;
+}
+
+.hover-menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hover-menu-item {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hover-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.25rem;
+  font-weight: 300;
+  padding: 0.75rem 0;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.hover-menu-link:hover {
+  color: #fff;
+}
+
+.hover-menu-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: #fff;
+  transition: width 0.3s ease;
+}
+
+.hover-menu-link:hover::after {
+  width: 100%;
+}
+
+.hover-menu-number {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 400;
+  min-width: 1.5rem;
+}
+
+.hover-menu-label {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .hover-menu-nav {
+    min-width: 250px;
+    max-width: 300px;
+    padding: 1.5rem;
+  }
+  
+  .hover-menu-link {
+    font-size: 1.125rem;
+  }
+}
+
