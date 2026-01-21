@@ -26,8 +26,6 @@ export default function HoverMenu({
   const [isOpen, setIsOpen] = useState(false);
   const openRef = useRef(false);
   const panelRef = useRef<HTMLElement>(null);
-  const preLayersRef = useRef<HTMLDivElement>(null);
-  const preLayerElsRef = useRef<HTMLElement[]>([]);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const openTlRef = useRef<gsap.core.Timeline | null>(null);
   const closeTweenRef = useRef<gsap.core.Tween | null>(null);
@@ -37,24 +35,16 @@ export default function HoverMenu({
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const panel = panelRef.current;
-      const preContainer = preLayersRef.current;
       if (!panel) return;
 
-      let preLayers: HTMLElement[] = [];
-      if (preContainer) {
-        preLayers = Array.from(preContainer.querySelectorAll('.sm-prelayer')) as HTMLElement[];
-      }
-      preLayerElsRef.current = preLayers;
-
       const offscreen = 100;
-      gsap.set([panel, ...preLayers], { xPercent: offscreen });
+      gsap.set(panel, { xPercent: offscreen });
     });
     return () => ctx.revert();
   }, []);
 
   const buildOpenTimeline = useCallback(() => {
     const panel = panelRef.current;
-    const layers = preLayerElsRef.current;
     if (!panel) return null;
 
     openTlRef.current?.kill();
@@ -67,7 +57,6 @@ export default function HoverMenu({
     const itemEls = Array.from(panel.querySelectorAll('.sm-panel-itemLabel')) as HTMLElement[];
     const numberEls = Array.from(panel.querySelectorAll('.sm-panel-list[data-numbering] .sm-panel-item')) as HTMLElement[];
 
-    const layerStates = layers.map(el => ({ el, start: Number(gsap.getProperty(el, 'xPercent')) }));
     const panelStart = Number(gsap.getProperty(panel, 'xPercent'));
 
     if (itemEls.length) {
@@ -79,22 +68,17 @@ export default function HoverMenu({
 
     const tl = gsap.timeline({ paused: true });
 
-    layerStates.forEach((ls, i) => {
-      tl.fromTo(ls.el, { xPercent: ls.start }, { xPercent: 0, duration: 0.5, ease: 'power4.out' }, i * 0.07);
-    });
-    const lastTime = layerStates.length ? (layerStates.length - 1) * 0.07 : 0;
-    const panelInsertTime = lastTime + (layerStates.length ? 0.08 : 0);
     const panelDuration = 0.65;
     tl.fromTo(
       panel,
       { xPercent: panelStart },
       { xPercent: 0, duration: panelDuration, ease: 'power4.out' },
-      panelInsertTime
+      0
     );
 
     if (itemEls.length) {
       const itemsStartRatio = 0.15;
-      const itemsStart = panelInsertTime + panelDuration * itemsStartRatio;
+      const itemsStart = panelDuration * itemsStartRatio;
       tl.to(
         itemEls,
         {
@@ -144,13 +128,11 @@ export default function HoverMenu({
     itemEntranceTweenRef.current?.kill();
 
     const panel = panelRef.current;
-    const layers = preLayerElsRef.current;
     if (!panel) return;
 
-    const all = [...layers, panel];
     closeTweenRef.current?.kill();
     const offscreen = 100;
-    closeTweenRef.current = gsap.to(all, {
+    closeTweenRef.current = gsap.to(panel, {
       xPercent: offscreen,
       duration: 0.32,
       ease: 'power3.in',
@@ -225,18 +207,6 @@ export default function HoverMenu({
       data-position="right"
       data-open={isOpen || undefined}
     >
-      <div ref={preLayersRef} className="sm-prelayers" aria-hidden="true">
-        {(() => {
-          const raw = colors && colors.length ? colors.slice(0, 4) : ['#000000', '#1a1a1a'];
-          let arr = [...raw];
-          if (arr.length >= 3) {
-            const mid = Math.floor(arr.length / 2);
-            arr.splice(mid, 1);
-          }
-          return arr.map((c, i) => <div key={i} className="sm-prelayer" style={{ background: c }} />);
-        })()}
-      </div>
-
       <aside id="hover-menu-panel" ref={panelRef} className="staggered-menu-panel" aria-hidden={!isOpen}>
         <div className="sm-panel-inner">
           <ul className="sm-panel-list" role="list" data-numbering={displayItemNumbering || undefined}>
