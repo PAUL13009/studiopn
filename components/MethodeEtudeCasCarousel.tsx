@@ -265,39 +265,47 @@ export default function MethodeEtudeCasCarousel({ items }: MethodeEtudeCasCarous
           </div>
 
           {/* Contenu détaillé (expandable) */}
-          {currentStepDetails && (
-            <div
-              ref={contentRef}
-              className="w-full max-w-4xl mx-auto overflow-hidden"
-              style={{ display: 'none', height: 0 }}
-            >
-              <div className="pt-6 border-t border-white/10 space-y-6">
-                {/* Objectif */}
-                <div>
-                  <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
-                    Objectif
-                  </h3>
-                  <p className="text-base sm:text-lg text-white/90 leading-relaxed">
-                    {currentStepDetails.objectif}
-                  </p>
-                </div>
-                
-                {/* Explication */}
-                <div>
-                  <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
-                    Explication
-                  </h3>
-                  <div className="space-y-3 text-base sm:text-lg text-white/85 leading-relaxed">
-                    {currentStepDetails.explication.map((line, index) => (
-                      <p key={index}>
-                        {line}
-                      </p>
-                    ))}
+          {(() => {
+            if (!currentStepDetails) return null;
+            
+            const explication: string[] = currentStepDetails.explication || [];
+            
+            return (
+              <div
+                ref={contentRef}
+                className="w-full max-w-4xl mx-auto overflow-hidden"
+                style={{ display: 'none', height: 0 }}
+              >
+                <div className="pt-6 border-t border-white/10 space-y-6">
+                  {/* Objectif */}
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
+                      Objectif
+                    </h3>
+                    <p className="text-base sm:text-lg text-white/90 leading-relaxed">
+                      {currentStepDetails.objectif}
+                    </p>
                   </div>
+                  
+                  {/* Explication */}
+                  {explication.length > 0 && (
+                    <div>
+                      <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
+                        Explication
+                      </h3>
+                      <div className="space-y-3 text-base sm:text-lg text-white/85 leading-relaxed">
+                        {explication.map((line, index) => (
+                          <p key={index}>
+                            {line}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
           
           {/* Flèche vers le bas/haut */}
           {currentStepDetails && (
