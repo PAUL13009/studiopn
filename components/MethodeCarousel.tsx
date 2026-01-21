@@ -293,6 +293,8 @@ export default function MethodeCarousel({ items }: MethodeCarouselProps) {
           const currentStepDetails = stepDetails[currentIndex];
           if (!currentStepDetails) return null;
           
+          const explication = currentStepDetails.explication;
+          
           return (
             <div
               ref={contentRef}
@@ -313,25 +315,20 @@ export default function MethodeCarousel({ items }: MethodeCarouselProps) {
                 )}
                 
                 {/* Explication */}
-                {(() => {
-                  const explication = currentStepDetails.explication;
-                  if (!explication || explication.length === 0) return null;
-                  
-                  return (
-                    <div>
-                      <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
-                        Explication
-                      </h3>
-                      <div className="space-y-3 text-base sm:text-lg text-white/85 leading-relaxed">
-                        {explication.map((line, index) => (
-                          <p key={index}>
-                            {line}
-                          </p>
-                        ))}
-                      </div>
+                {explication && explication.length > 0 && (
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
+                      Explication
+                    </h3>
+                    <div className="space-y-3 text-base sm:text-lg text-white/85 leading-relaxed">
+                      {explication.map((line, index) => (
+                        <p key={index}>
+                          {line}
+                        </p>
+                      ))}
                     </div>
-                  );
-                })()}
+                  </div>
+                )}
               </div>
             </div>
           );
