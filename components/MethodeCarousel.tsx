@@ -289,39 +289,48 @@ export default function MethodeCarousel({ items }: MethodeCarouselProps) {
         </p>
         
         {/* Contenu détaillé (expandable) */}
-        {stepDetails[currentIndex] && (
-          <div
-            ref={contentRef}
-            className="w-full max-w-4xl mx-auto overflow-hidden"
-            style={{ display: 'none', height: 0 }}
-          >
-            <div className="pt-6 border-t border-white/10 space-y-6">
-              {/* Objectif */}
-              <div>
-                <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
-                  Objectif
-                </h3>
-                <p className="text-base sm:text-lg text-white/90 leading-relaxed">
-                  {stepDetails[currentIndex].objectif}
-                </p>
-              </div>
-              
-              {/* Explication */}
-              <div>
-                <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
-                  Explication
-                </h3>
-                <div className="space-y-3 text-base sm:text-lg text-white/85 leading-relaxed">
-                  {stepDetails[currentIndex].explication.map((line, index) => (
-                    <p key={index}>
-                      {line}
+        {(() => {
+          const currentStepDetails = stepDetails[currentIndex];
+          if (!currentStepDetails) return null;
+          
+          return (
+            <div
+              ref={contentRef}
+              className="w-full max-w-4xl mx-auto overflow-hidden"
+              style={{ display: 'none', height: 0 }}
+            >
+              <div className="pt-6 border-t border-white/10 space-y-6">
+                {/* Objectif */}
+                {currentStepDetails.objectif && (
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
+                      Objectif
+                    </h3>
+                    <p className="text-base sm:text-lg text-white/90 leading-relaxed">
+                      {currentStepDetails.objectif}
                     </p>
-                  ))}
-                </div>
+                  </div>
+                )}
+                
+                {/* Explication */}
+                {currentStepDetails.explication && currentStepDetails.explication.length > 0 && (
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
+                      Explication
+                    </h3>
+                    <div className="space-y-3 text-base sm:text-lg text-white/85 leading-relaxed">
+                      {currentStepDetails.explication.map((line, index) => (
+                        <p key={index}>
+                          {line}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
         
         {/* Flèche vers le bas/haut */}
         {stepDetails[currentIndex] && (
