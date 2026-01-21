@@ -293,7 +293,7 @@ export default function MethodeCarousel({ items }: MethodeCarouselProps) {
           const currentStepDetails = stepDetails[currentIndex];
           if (!currentStepDetails) return null;
           
-          const explication = currentStepDetails.explication;
+          const explication: string[] = currentStepDetails.explication || [];
           
           return (
             <div
@@ -315,7 +315,7 @@ export default function MethodeCarousel({ items }: MethodeCarouselProps) {
                 )}
                 
                 {/* Explication */}
-                {explication && explication.length > 0 && (
+                {explication.length > 0 && (
                   <div>
                     <h3 className="text-lg sm:text-xl font-medium text-white mb-3">
                       Explication
